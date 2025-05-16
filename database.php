@@ -48,6 +48,16 @@
             $query->execute() or die($this->mysqli->error);
         }
 
+         public function delete($table){
+            if (isset($_GET['id'])) {
+                $id = $_GET['id'];
+                $sql = "DELETE FROM $table WHERE id=$id";
+
+                $query = $this->mysqli->prepare($sql) or die($this->mysqli->error);
+                $query->execute();
+            }
+        }
+
         function __destruct()
         {
             $this->mysqli->close();
