@@ -325,8 +325,8 @@
                       </td>
                       <td class="action-cell">
                         <div>
-                          <a class="edit-link" href="#"> Edit </a>
-                           <a class="delete-link" onclick="return confirm('Apakah Anda Yakin?')" href="<?= "delete.php?id=$data[id] "?> "> Delete </a>
+                          <a class="edit-link" href="<?= "update.php?id=$data[id] "?> "> Edit </a>
+                          <a class="delete-link" onclick="return confirm('Apakah Anda Yakin?')" href="<?= "delete.php?id=$data[id] "?> "> Delete </a>
                         </div>
                       </td>
                     </tr>

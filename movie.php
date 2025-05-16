@@ -29,4 +29,9 @@ class Movie
     {
         return $this->db->delete('movies');
     }
+
+    public function updateMovie($data, $id)
+    {
+        return $this->db->update('movies', $data, $id);
+    }
 }

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TAMBAH FILM</title>
+    <title>Application Form</title>
     <style>
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -148,73 +148,78 @@
     </style>
   </head>
   <body>
-    <div class="container">
-      <a href="index.php" class="back-btn">← Back</a>
+    <?php
+        require_once '../movie.php';
+        $movie = new Movie();
+        $id = $_GET['id'];
+        $datas = $movie->getMovieById($id);
+        foreach ($datas as $data) {
+        ?>
+        <div class="container">
+            <a href="index.php" class="back-btn">← Back</a>
 
-      <div class="card">
-        <form method="post" enctype="multipart/form-data">
-          <h2 class="form-title">Add Movie</h2>
+            <div class="card">
+                <form method="post" enctype="multipart/form-data">
+                <h2 class="form-title">Update Movie</h2>
 
-          <div class="form-grid">
-            <label for="Title" class="form-label">Title</label>
-            <div class="input-group">
-              <input id="Title" type="text" class="form-input" name="title" required/>
-            </div>
-          </div>
+                <div class="form-grid">
+                    <label for="Title" class="form-label">Title</label>
+                    <div class="input-group">
+                    <input id="Title" type="text" class="form-input" name="title" required value="<?= $data['title'] ?>"/>
+                    </div>
+                </div>
 
-          <div class="form-grid">
-            <label for="genre" class="form-label">Genre</label>
-            <div class="input-group">
-              <input id="genre" type="text" class="form-input" name="genre" required />
-            </div>
-          </div>
+                <div class="form-grid">
+                    <label for="genre" class="form-label">Genre</label>
+                    <div class="input-group">
+                    <input id="genre" type="text" class="form-input" name="genre" required value="<?= $data['genre'] ?>"/>
+                    </div>
+                </div>
 
-          <div class="form-grid">
-            <label for="cover" class="form-label">Cover</label>
-            <div class="input-group">
-              <input type="file" id="cover" class="file-input" accept="image/jpg, image/png, image/jpeg" name="cover" required />
-            </div>
-          </div>
+                <div class="form-grid">
+                    <label for="cover" class="form-label">Cover</label>
+                    <div class="input-group">
+                    <input type="file" id="cover" class="file-input" name="cover" accept="image/png, image/jpg, image/jpeg"/>
+                    </div>
+                </div>
 
-          <div class="form-grid">
-            <label for="description" class="form-label">Description</label>
-            <div class="input-group">
-              <textarea
-                id="description"
-                class="form-textarea"
-                placeholder="Add a Description For the Movie."
-                name="description"
-                required
-              ></textarea>
-            </div>
-          </div>
+                <div class="form-grid">
+                    <label for="description" class="form-label">Description</label>
+                    <div class="input-group">
+                    <textarea
+                        id="description"
+                        class="form-textarea"
+                        placeholder="Add a Description For the Movie."
+                        name="description"
+                        required
+                    ><?= $data['description'] ?></textarea>
+                    </div>
+                </div>
 
-          <button type="submit" name="submit" class="submit-btn">Submit Movie</button>
+                <button type="submit" name="submit" class="submit-btn">Submit Movie</button>
         </form>
-        <?php 
-            require_once "../movie.php";
-            $movie = new Movie();
-            if(isset($_POST['submit'])){
-                $title = $_POST['title'];
-                $genre = $_POST['genre'];
-                $description = $_POST['description'];
-                $cover = $_FILES['cover']['name'];
+        <?php
+        }
 
-                $path = "../images/" . basename($cover);
-                move_uploaded_file($_FILES['cover']['tmp_name'],$path);
+        if (isset($_POST['submit'])) {
+            $title = $_POST['title'];
+            $genre = $_POST['genre'];
+            $description = $_POST['description'];
+            $cover = $_FILES['cover']['name'];
 
-                $data = [
-                    'title' => $title,
-                    'genre' => $genre,
-                    'description' => $description,
-                    'cover' => $cover,
-                ];
+            $path = "../images/" . basename($cover);
+            move_uploaded_file($_FILES['cover']['tmp_name'], $path);
 
-                $movie->addMovie($data);
-                echo "<script>alert('Data Berhasil Disimpan'); window.location.href='index.php';</script>";
-
-
-            }
+            $data = [
+                'title' => $title,
+                'genre' => $genre,
+                'description' => $description,
+                'cover' => $cover
+            ];
+            $where = ['id' => $id];
+            $movie->updateMovie($data, $where);
+            echo "<script>alert('Data Berhasil Diupdate'); window.location.href='index.php';</script>";    
+        }
         ?>
       </div>
     </div>
